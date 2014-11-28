@@ -2,7 +2,7 @@
 lock '3.3.3'
 
 set :application, 'bgg-tools'
-set :repo_url, 'git@example.com:me/my_repo.git'
+set :repo_url, 'git@github.com:bhardin/bgg-tools.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
