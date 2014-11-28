@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @user.name %></h1>
+
+<div class="well well-sm">
+  <ul>
+    <li>Total Game Value (AVG): $ <%= @user.collection_value %></li>
+    <li>Total Games: <%= @user.games.length %></li>
+    <li>Average Game Price: $ <%= @user.average_game_price %></li>
+    <li>Games with no price: <%= @user.games_without_prices %> (Never Sold on BGG Market Place)</li>
+  </ul>
+</div>
+
+<button type="button" class="btn btn-default"><%= link_to "Update Games", update_games_user_path %></button>
+
+<table class="table">
+	<thead>
+    <tr>
+      <th>Name</th>
+      <th>Average Value</th>
+    </tr>
+  </thead>
+	<% @games.each do | game | %>
+  	<tr>
+  		<td><%= link_to game.name, game %></td>
+      <td><%= game.average_price %></td>
+  	</tr>
+	<% end %>
+</table>
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>

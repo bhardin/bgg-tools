@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @game.name %></h1>
+
+<table class="table">
+	<thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+	<tr>
+		<td>BGG-ID</td>
+		<td><%= @game.bgg_id %></td>
+	</tr>
+	<tr>
+		<td>new_price</td>
+		<td><%= @game.new_price %></td>
+	</tr>
+	<tr>
+		<td>like_new_price</td>
+		<td><%= @game.like_new_price %></td>
+	</tr>
+	<tr>
+		<td>very_good_price</td>
+		<td><%= @game.very_good_price %></td>
+	</tr>
+	<tr>
+		<td>good_price</td>
+		<td><%= @game.good_price %></td>
+	</tr>
+	<tr>
+		<td>acceptable_price</td>
+		<td><%= @game.acceptable_price %></td>
+	</tr>
+	<tr>
+		<td>average_price</td>
+		<td><%= @game.average_price %></td>
+	</tr>
+</table>
+
+
+<%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Back', games_path %>

@@ -1,0 +1,7 @@
+<h1>Collection Value?</h1>
+
+<%= form_tag("/users/search", :method => 'get') do %>
+  <%= label_tag(:q, "BGG Username:") %>
+  <%= text_field_tag(:q) %>
+  <%= submit_tag("Search") %>
+<% end %>
