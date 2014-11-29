@@ -14,7 +14,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server '23.239.7.54', user: 'root', roles: %w{web app}, my_property: :my_value
+server '23.239.7.54', user: 'bggtools', roles: %w{web app}, my_property: :my_value
 
 # Custom SSH Options
 # ==================
