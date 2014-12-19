@@ -41,3 +41,16 @@ server '23.239.7.54', user: 'bggtools', roles: %w{web app}
 #     auth_methods: %w(publickey password)
 #     # password: 'please use keys'
 #   }
+
+namespace :deploy do
+  desc "Symlinks the database.yml"
+
+  task :symlink_db do
+	  on "bggtools@23.239.7.54" do
+	    execute "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+	  end
+  end
+end
+
+# Copy database.yml
+before 'deploy:updated', 'deploy:symlink_db'

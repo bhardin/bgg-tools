@@ -21,4 +21,4 @@ Source code for bggtools.com.
 
 ## Deploying to Production
 
-`cap deploy:setup`
+`cap production deploy`
