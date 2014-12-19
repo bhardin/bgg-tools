@@ -14,7 +14,8 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server '23.239.7.54', user: 'bggtools', roles: %w{web app}
+server '23.239.7.54', user: 'bggtools', roles: %w{web app db}
+# set :nginx_server_name, 'bggtools.com'
 
 # Custom SSH Options
 # ==================
