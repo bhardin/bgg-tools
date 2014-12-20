@@ -1,16 +1,14 @@
 # Set the working application directory
-# working_directory "/path/to/your/app"
-working_directory "/var/www/bgg-tools"
+APP_PATH = "/var/www/bgg-tools"
+working_directory APP_PATH
 
 # Unicorn PID file location
 # pid "/path/to/pids/unicorn.pid"
-pid "/var/www/bgg-tools/pids/unicorn.pid"
+pid APP_PATH + "/tmp/pid/unicorn.pid"
 
 # Path to logs
-# stderr_path "/path/to/log/unicorn.log"
-# stdout_path "/path/to/log/unicorn.log"
-stderr_path "/var/www/bgg-tools/log/unicorn.log"
-stdout_path "/var/www/bgg-tools/log/unicorn.log"
+stderr_path APP_PATH + "/log/unicorn.log"
+stdout_path APP_PATH + "/log/unicorn.log"
 
 # Unicorn socket
 listen "/tmp/unicorn.bgg-tools.sock"
