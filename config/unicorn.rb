@@ -1,5 +1,5 @@
 # Set the working application directory
-APP_PATH = "/var/www/bgg-tools"
+APP_PATH = "/var/www/bgg-tools/current"
 working_directory APP_PATH
 
 # Unicorn PID file location
