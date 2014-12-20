@@ -3,8 +3,7 @@ APP_PATH = "/var/www/bgg-tools/current"
 working_directory APP_PATH
 
 # Unicorn PID file location
-# pid "/path/to/pids/unicorn.pid"
-pid APP_PATH + "/tmp/pid/unicorn.pid"
+pid APP_PATH + "/tmp/pids/unicorn.pid"
 
 # Path to logs
 stderr_path APP_PATH + "/log/unicorn.log"
