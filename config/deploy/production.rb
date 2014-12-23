@@ -43,7 +43,7 @@ server '23.239.7.54', user: 'bggtools', roles: %w{web app db}
 #     # password: 'please use keys'
 #   }
 
-set :sidekiq_pid => File.join(shared_path, 'pids', 'sidekiq.pid')
+set :sidekiq_pid, File.join(shared_path, 'pids', 'sidekiq.pid')
 
 namespace :deploy do
   desc "Symlinks the database.yml"
