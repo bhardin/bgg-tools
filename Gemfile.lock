@@ -54,6 +54,9 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-sidekiq (0.4.0)
+      capistrano
+      sidekiq
     capistrano-stats (1.0.3)
     celluloid (0.15.2)
       timers (~> 1.1.0)
@@ -207,6 +210,7 @@ DEPENDENCIES
   capistrano-nginx-unicorn
   capistrano-rails (~> 1.1)
   capistrano-rvm
+  capistrano-sidekiq
   coffee-rails (~> 4.0.0)
   friendly_id
   jbuilder (~> 1.2)
