@@ -1,6 +1,5 @@
 class GameUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => 3 # Only five retries and then to the Dead Job Queue
 
   def perform(bgg_id)
     game = Game.find_by(bgg_id: bgg_id)
