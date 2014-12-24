@@ -31,8 +31,8 @@ class UsersController < ApplicationController
   end
 
   def update_games
-    @user.update_collection
-    redirect_to @user
+    # @user.update_collection
+    # redirect_to @user
   end
 
   # GET /users/new
