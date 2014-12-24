@@ -3,6 +3,8 @@ class Game < ActiveRecord::Base
   has_many :users_games
   has_many :users, through: :users_games
 
+  UPDATE_TIMEFRAME = 1.month
+
   def self.primary_name(name_array)
     name_array.each do |name|
       return name["value"] if name["type"] == "primary"
@@ -15,7 +17,7 @@ class Game < ActiveRecord::Base
 
   def needs_updating?
     # No Name or Updated within 1 month
-    name.nil? || self.updated_at < Time.zone.now - 1.month
+    name.nil? || self.updated_at < Time.zone.now - UPDATE_TIMEFRAME
   end
 
   def update_stuff(bgg_data)
