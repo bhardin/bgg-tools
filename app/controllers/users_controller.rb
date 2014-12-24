@@ -1,12 +1,5 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update_games, :edit, :update, :destroy]
-  UPDATES_TIMEFRAME = 15.days
-
-  # GET /users
-  # GET /users.json
-  def index
-    @users = User.all
-  end
 
   # GET /users/1
   # GET /users/1.json
