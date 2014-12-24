@@ -49,60 +49,60 @@ class Game < ActiveRecord::Base
     end
   end
 
-  # private
-  def store_averages
-    price_hash.each do |name, data|
-      case name
-      when :new
-        self.new_price = price_hash[:new][:average]
-      when :likenew
-        self.like_new_price = price_hash[:likenew][:average]
-      when :verygood
-        self.very_good_price = price_hash[:verygood][:average]
-      when :good
-        self.good_price = price_hash[:good][:average]
-      when :acceptable
-        self.acceptable_price = price_hash[:acceptable][:average]
+  private
+    def store_averages
+      price_hash.each do |name, data|
+        case name
+        when :new
+          self.new_price = price_hash[:new][:average]
+        when :likenew
+          self.like_new_price = price_hash[:likenew][:average]
+        when :verygood
+          self.very_good_price = price_hash[:verygood][:average]
+        when :good
+          self.good_price = price_hash[:good][:average]
+        when :acceptable
+          self.acceptable_price = price_hash[:acceptable][:average]
+        end
       end
+
+      self.average_price = (price_hash.map { |x| x[1][:average] }.sum / price_hash.size.to_f).round(2)
+      self.average_price = 0 if self.average_price.nan?
+
+      self.save
     end
 
-    self.average_price = (price_hash.map { |x| x[1][:average] }.sum / price_hash.size.to_f).round(2)
-    self.average_price = 0 if self.average_price.nan?
+    def price_hash
+      @price_hash = {}
 
-    self.save
-  end
+      return @price_hash unless marketplace_listings
 
-  def price_hash
-    @price_hash = {}
+      marketplace_listings.each do |listing|
+        condition = listing["condition"][0]["value"]
+        value = listing["price"][0]["value"]
+        currency = listing["price"][0]["currency"]
+        listdate = listing["listdate"][0]["value"]
 
-    return @price_hash unless marketplace_listings
+        # Only use USD prices
+        next unless currency == "USD"
 
-    marketplace_listings.each do |listing|
-      condition = listing["condition"][0]["value"]
-      value = listing["price"][0]["value"]
-      currency = listing["price"][0]["currency"]
-      listdate = listing["listdate"][0]["value"]
-
-      # Only use USD prices
-      next unless currency == "USD"
-
-      if @price_hash[condition.to_sym]
-        @price_hash[condition.to_sym][:total] += value.to_f
-        @price_hash[condition.to_sym][:count] += 1
-      else
-        @price_hash[condition.to_sym] = {}
-        @price_hash[condition.to_sym][:total] = value.to_f
-        @price_hash[condition.to_sym][:count] = 1
+        if @price_hash[condition.to_sym]
+          @price_hash[condition.to_sym][:total] += value.to_f
+          @price_hash[condition.to_sym][:count] += 1
+        else
+          @price_hash[condition.to_sym] = {}
+          @price_hash[condition.to_sym][:total] = value.to_f
+          @price_hash[condition.to_sym][:count] = 1
+        end
       end
-    end
 
-    # calculate and add averages
-    @price_hash.each do |data|
-      average = (data[1][:total] / data[1][:count].to_f).round(2)
-      data[1][:average] = average
-    end
+      # calculate and add averages
+      @price_hash.each do |data|
+        average = (data[1][:total] / data[1][:count].to_f).round(2)
+        data[1][:average] = average
+      end
 
-    @price_hash
-  end
+      @price_hash
+    end
 
 end
