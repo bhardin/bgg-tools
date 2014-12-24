@@ -1,13 +1,26 @@
 class GameUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => 15 # Only five retries and then to the Dead Job Queue
+  sidekiq_options :retry => 3 # Only five retries and then to the Dead Job Queue
 
-  def perform(bgg_game_id)
-    bgg_api = BggApi.new
-    bgg_data = bgg_api.thing(:id => bgg_game_id,
-                             :marketplace => 1)["item"].first
+  def perform(bgg_id)
+    game = Game.find_by(bgg_id: bgg_id)
 
-    game = Game.find_or_create_by(bgg_id: bgg_game_id)
-    game.convert_bggdata(bgg_data)
+    if game.needs_updating?
+      logger.info "Attempting update for #{game.id}"
+
+    	bgg_api = BggApi.new
+    	bgg_data = bgg_api.thing(:id => bgg_id,
+                               :marketplace => 1)["item"].first
+
+      game.name = bgg_data["name"].first["value"]
+
+      if bgg_data["marketplacelistings"]
+        game.calculate_averages(bgg_data["marketplacelistings"])
+      end
+
+      game.save
+
+      logger.info "Updated #{game.name}"
+    end
   end
 end

@@ -4,7 +4,7 @@ Source code for bggtools.com.
 
 ## TO-DO
 
-[ ] Figure out a way to deploy. (Capistrano?)
+[X] Figure out a way to deploy. (Capistrano?)
 [ ] Update Jquery on page, rather than refresh.
 [ ] Migrate dev environment to MySQL
 

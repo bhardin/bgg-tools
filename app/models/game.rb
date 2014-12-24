@@ -3,24 +3,18 @@ class Game < ActiveRecord::Base
   has_many :users_games
   has_many :users, through: :users_games
 
-  def self.find_or_create_from_bgg(id)
-    game = Game.find_by_bgg_id(id)
-
-    if game.nil?
-      game = Game.create_from_bgg(id)
-    end
-
-    game
-  end
-
   def self.create_from_bgg(id)
-    GameUpdateWorker.perform_async(id)
+    Game.find_or_create_by(bgg_id: id)
+    # GameUpdateWorker.perform_async(id)
   end
 
   def update_bgg_data
-    self.bgg_data = BggApi.new.thing(:id => id)["item"].first
+    GameUpdateWorker.perform_async(bgg_id)
+  end
 
-    self.save
+  def needs_updating?
+    # No Name or Updated within 1 month
+    name.nil? || self.updated_at < Time.zone.now - 1.month
   end
 
   def thumbnail
@@ -35,49 +29,45 @@ class Game < ActiveRecord::Base
     bgg_data["minplayers"].first["value"]
   end
 
-  def convert_bggdata(bggdata)
-    self.bgg_data = bggdata
-    self.name = bgg_data["name"].first["value"]
-    store_averages # This will save the data
+  def calculate_averages(marketplace_listings)
+    @marketplace_listings = marketplace_listings[0]["listing"]
+
+    price_hash.each do |name, data|
+      case name
+      when :new
+        self.new_price = price_hash[:new][:average]
+      when :likenew
+        self.like_new_price = price_hash[:likenew][:average]
+      when :verygood
+        self.very_good_price = price_hash[:verygood][:average]
+      when :good
+        self.good_price = price_hash[:good][:average]
+      when :acceptable
+        self.acceptable_price = price_hash[:acceptable][:average]
+      end
+    end
+
+    self.average_price = (price_hash.map { |x| x[1][:average] }.sum / price_hash.size.to_f).round(2)
+    self.average_price = 0 if self.average_price.nan?
+
+    self.save
   end
 
-  def marketplace_listings
-    if bgg_data["marketplacelistings"] && bgg_data["marketplacelistings"][0] && bgg_data["marketplacelistings"][0]["listing"]
-      bgg_data["marketplacelistings"][0]["listing"]
-    else
-      nil
-    end
-  end
+  # def marketplace_listings
+  #   if bgg_data["marketplacelistings"] && bgg_data["marketplacelistings"][0] && bgg_data["marketplacelistings"][0]["listing"]
+  #     bgg_data["marketplacelistings"][0]["listing"]
+  #   else
+  #     nil
+  #   end
+  # end
 
   private
-    def store_averages
-      price_hash.each do |name, data|
-        case name
-        when :new
-          self.new_price = price_hash[:new][:average]
-        when :likenew
-          self.like_new_price = price_hash[:likenew][:average]
-        when :verygood
-          self.very_good_price = price_hash[:verygood][:average]
-        when :good
-          self.good_price = price_hash[:good][:average]
-        when :acceptable
-          self.acceptable_price = price_hash[:acceptable][:average]
-        end
-      end
-
-      self.average_price = (price_hash.map { |x| x[1][:average] }.sum / price_hash.size.to_f).round(2)
-      self.average_price = 0 if self.average_price.nan?
-
-      self.save
-    end
-
     def price_hash
       @price_hash = {}
 
-      return @price_hash unless marketplace_listings
+      return @price_hash unless @marketplace_listings
 
-      marketplace_listings.each do |listing|
+      @marketplace_listings.each do |listing|
         condition = listing["condition"][0]["value"]
         value = listing["price"][0]["value"]
         currency = listing["price"][0]["currency"]

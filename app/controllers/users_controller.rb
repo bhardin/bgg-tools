@@ -11,13 +11,13 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if @user.updated_at > Time.now + UPDATES_TIMEFRAME || @user.games.nil?
-      @user.update_collection
-    end
+    # if @user.updated_at > Time.now + UPDATES_TIMEFRAME || @user.games.nil?
+    #   @user.update_collection
+    # end
     @games = @user.games
 
     @games.each do |g|
-      Game.create_from_bgg(g.bgg_id) if g.name.nil?
+      g.update_bgg_data
     end
   end
 
