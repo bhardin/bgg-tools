@@ -12,7 +12,7 @@ class GameUpdateWorker
     	bgg_data = bgg_api.thing(:id => bgg_id,
                                :marketplace => 1)["item"].first
 
-      game.name = bgg_data["name"].first["value"]
+      game.update_stuff(bgg_data)
 
       if bgg_data["marketplacelistings"]
         game.calculate_averages(bgg_data["marketplacelistings"])

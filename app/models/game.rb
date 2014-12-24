@@ -1,11 +1,12 @@
 class Game < ActiveRecord::Base
-  serialize :bgg_data, Hash
+  serialize :poll, Hash
   has_many :users_games
   has_many :users, through: :users_games
 
-  def self.create_from_bgg(id)
-    Game.find_or_create_by(bgg_id: id)
-    # GameUpdateWorker.perform_async(id)
+  def self.primary_name(name_array)
+    name_array.each do |name|
+      return name["value"] if name["type"] == "primary"
+    end
   end
 
   def update_bgg_data
@@ -17,16 +18,19 @@ class Game < ActiveRecord::Base
     name.nil? || self.updated_at < Time.zone.now - 1.month
   end
 
-  def thumbnail
-    bgg_data["thumbnail"].first
-  end
+  def update_stuff(bgg_data)
+    self.name           = Game.primary_name(bgg_data["name"])
+    self.thumbnail      = bgg_data["thumbnail"].first
+    self.image          = bgg_data["image"].first
+    self.min_players    = bgg_data["minplayers"].first["value"]
+    self.max_players    = bgg_data["maxplayers"].first["value"]
+    self.description    = bgg_data["description"].first
+    self.year_published = bgg_data["yearpublished"].first["value"]
+    self.polls          = bgg_data["poll"]
+    self.playing_time   = bgg_data["playingtime"].first["value"]
+    self.minimum_age    = bgg_data["minage"].first["value"]
 
-  def image
-    bgg_data["image"].first
-  end
-
-  def min_players
-    bgg_data["minplayers"].first["value"]
+    self.save
   end
 
   def calculate_averages(marketplace_listings)
@@ -52,14 +56,6 @@ class Game < ActiveRecord::Base
 
     self.save
   end
-
-  # def marketplace_listings
-  #   if bgg_data["marketplacelistings"] && bgg_data["marketplacelistings"][0] && bgg_data["marketplacelistings"][0]["listing"]
-  #     bgg_data["marketplacelistings"][0]["listing"]
-  #   else
-  #     nil
-  #   end
-  # end
 
   private
     def price_hash
