@@ -1,5 +1,5 @@
 Bggtools::Application.routes.draw do
-  resources :users do
+  resources :users, only: [:show] do
     collection do
       get 'search'
     end
@@ -9,7 +9,7 @@ Bggtools::Application.routes.draw do
     end
   end
 
-  resources :games
+  resources :games, only: [:show]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
