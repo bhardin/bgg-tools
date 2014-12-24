@@ -7,6 +7,7 @@ Source code for bggtools.com.
 [X] Figure out a way to deploy. (Capistrano?)
 [ ] Update Jquery on page, rather than refresh.
 [ ] Migrate dev environment to MySQL
+[ ] Move Update User to a background worker.
 
 ## Running Locally
 
