@@ -1,44 +1,67 @@
 <p id="notice"><%= notice %></p>
 
-<h1><%= @game.name %></h1>
+<div class="row">
+	<div class="col-md-3">
+		<h1><%= @game.name %></h1>
+		<%= image_tag(@game.thumbnail) %>
+  </div>
 
-<table class="table">
-	<thead>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-	<tr>
-		<td>BGG-ID</td>
-		<td><%= @game.bgg_id %></td>
-	</tr>
-	<tr>
-		<td>new_price</td>
-		<td><%= @game.new_price %></td>
-	</tr>
-	<tr>
-		<td>like_new_price</td>
-		<td><%= @game.like_new_price %></td>
-	</tr>
-	<tr>
-		<td>very_good_price</td>
-		<td><%= @game.very_good_price %></td>
-	</tr>
-	<tr>
-		<td>good_price</td>
-		<td><%= @game.good_price %></td>
-	</tr>
-	<tr>
-		<td>acceptable_price</td>
-		<td><%= @game.acceptable_price %></td>
-	</tr>
-	<tr>
-		<td>average_price</td>
-		<td><%= @game.average_price %></td>
-	</tr>
-</table>
+  <div class="col-md-9">
+  	<table class="table">
+			<thead>
+		    <tr>
+		      <th>Name</th>
+		      <th>Value</th>
+		    </tr>
+		  </thead>
+			<tr>
+				<td>BGG-ID</td>
+				<td><%= @game.bgg_id %></td>
+			</tr>
+			<tr>
+				<td>new_price</td>
+				<td><%= @game.new_price %></td>
+			</tr>
+			<tr>
+				<td>like_new_price</td>
+				<td><%= @game.like_new_price %></td>
+			</tr>
+			<tr>
+				<td>very_good_price</td>
+				<td><%= @game.very_good_price %></td>
+			</tr>
+			<tr>
+				<td>good_price</td>
+				<td><%= @game.good_price %></td>
+			</tr>
+			<tr>
+				<td>acceptable_price</td>
+				<td><%= @game.acceptable_price %></td>
+			</tr>
+			<tr>
+				<td>average_price</td>
+				<td><%= @game.average_price %></td>
+			</tr>
+			<tr>
+				<td>last_updated</td>
+				<td><%= @game.updated_at %></td>
+			</tr>
+			<tr>
+				<td>image</td>
+				<td><%= @game.image %></td>
+			</tr>
+			<tr>
+				<td>thumbnail</td>
+				<td><%= @game.thumbnail %></td>
+			</tr>
+		</table>
+  </div>
+</div>
+
+<%= link_to "< previous", game_path(@game.id - 1) %> |
+<%= link_to "next >", game_path(@game.id + 1) %>
 
 
-<%= link_to 'Edit', edit_game_path(@game) %> |
-<%= link_to 'Back', games_path %>
+
+
+
