@@ -11,9 +11,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    # if @user.updated_at > Time.now + UPDATES_TIMEFRAME || @user.games.nil?
-    #   @user.update_collection
-    # end
+    @user.update_collection if @user.needs_updating?
     @games = @user.games
 
     @games.each do |g|
@@ -31,8 +29,8 @@ class UsersController < ApplicationController
   end
 
   def update_games
-    # @user.update_collection
-    # redirect_to @user
+    @user.update_collection
+    redirect_to @user
   end
 
   # GET /users/new

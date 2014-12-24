@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   has_many :users_games
   has_many :games, through: :users_games
 
+  UPDATE_TIMEFRAME = 15.days
+
   def update_collection
     self.games.delete_all # Remove old associations.
 
@@ -14,6 +16,13 @@ class User < ActiveRecord::Base
         games << game
       end
     end
+
+    self.updated_at = Time.now
+    self.save
+  end
+
+  def needs_updating?
+    games.empty? || self.updated_at < Time.zone.now - UPDATE_TIMEFRAME
   end
 
   def collection_value
