@@ -6,9 +6,12 @@ class User < ActiveRecord::Base
   has_many :games, through: :users_games
 
   def update_collection
+    self.games.delete_all # Remove old associations.
+
     collection.each do |item|
       if item["status"].first["own"] == "1"
-        self.games.create(:bgg_id => item["objectid"])
+        game = Game.find_or_create_by(:bgg_id => item['objectid'])
+        games << game
       end
     end
   end
