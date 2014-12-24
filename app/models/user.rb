@@ -29,11 +29,11 @@ class User < ActiveRecord::Base
   end
 
   private
-  def bgg
-    @bgg ||= BggApi.new
-  end
+    def bgg
+      @bgg ||= BggApi.new
+    end
 
-  def collection
-    @collection ||= bgg.collection( { :username => name } )["item"]
-  end
+    def collection
+      @collection ||= bgg.collection( { :username => name } )["item"]
+    end
 end
