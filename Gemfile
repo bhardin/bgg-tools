@@ -42,7 +42,3 @@ group :development, :test do
 	gem 'capistrano-nginx-unicorn'
 	gem 'capistrano-sidekiq'
 end
-
-group :test do
-	gem 'therubyracer'
-end
