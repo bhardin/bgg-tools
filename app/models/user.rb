@@ -8,17 +8,7 @@ class User < ActiveRecord::Base
   UPDATE_TIMEFRAME = 15.days
 
   def update_collection
-    self.games.delete_all # Remove old associations.
-
-    collection.each do |item|
-      if item["status"].first["own"] == "1"
-        game = Game.find_or_create_by(:bgg_id => item['objectid'])
-        games << game
-      end
-    end
-
-    self.updated_at = Time.now
-    self.save
+    UpdateUserWorker.perform_async(self.id)
   end
 
   def needs_updating?
@@ -37,12 +27,12 @@ class User < ActiveRecord::Base
     games.map {|x| x.average_price.to_f }.count(0)
   end
 
+  def collection
+    @collection ||= bgg.collection( { :username => name } )["item"]
+  end
+
   private
     def bgg
       @bgg ||= BggApi.new
-    end
-
-    def collection
-      @collection ||= bgg.collection( { :username => name } )["item"]
     end
 end

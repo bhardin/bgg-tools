@@ -6,10 +6,6 @@ class UsersController < ApplicationController
   def show
     @user.update_collection if @user.needs_updating?
     @games = @user.games
-
-    @games.each do |g|
-      g.update_bgg_data
-    end
   end
 
   def search
