@@ -12,7 +12,7 @@ class Game < ActiveRecord::Base
   end
 
   def update_bgg_data
-    GameUpdateWorker.perform_async(bgg_id)
+    GameUpdateWorker.perform_async(bgg_id) if self.needs_updating?
   end
 
   def needs_updating?
