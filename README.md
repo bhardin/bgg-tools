@@ -4,10 +4,12 @@ Source code for bggtools.com.
 
 ## TO-DO
 
-[X] Figure out a way to deploy. (Capistrano?)
-[ ] Update Jquery on page, rather than refresh.
-[ ] Migrate dev environment to MySQL
-[ ] Move Update User to a background worker.
+* [ ] Update Jquery on page, rather than refresh
+* [ ] Migrate dev environment to MySQL
+* [ ] Move Update User to a background worker
+* [ ] Add Link to Paypal donations
+* [ ] Capistrano: Unicorn
+* [ ] Capistrano: Sidekiq
 
 ## Running Locally
 
