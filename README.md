@@ -18,9 +18,9 @@ Source code for bggtools.com.
 
 ## Deleting all jobs from the Queue:
 
-* Job queue: `Sidekiq::Queue.new.clear`
-* Retry queue: `Sidekiq::RetrySet.new.clear`
-* Sidekiq::Stats.new.reset
+* Reset Job queue: `Sidekiq::Queue.new.clear`
+* Reset Retry queue: `Sidekiq::RetrySet.new.clear`
+* Reset Processed/Failed: `Sidekiq::Stats.new.reset`
 
 ## Deploying to Production
 
