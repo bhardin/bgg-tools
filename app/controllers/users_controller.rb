@@ -6,6 +6,11 @@ class UsersController < ApplicationController
   def show
     @user.update_collection if @user.needs_updating?
     @games = @user.games
+
+    if @games.empty?
+      @currently_updating = true
+      flash[:notice] = "Please hold while we update this user's games. This could take a few minutes."
+    end
   end
 
   def search
