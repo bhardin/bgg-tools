@@ -47,8 +47,8 @@ class Game < ActiveRecord::Base
                              pricehistory: 1)["item"].first
 
     self.name           = Game.primary_name(bgg_data["name"])
-    self.thumbnail      = bgg_data["thumbnail"].first
-    self.image          = bgg_data["image"].first
+    self.thumbnail      = bgg_data["thumbnail"].first if bgg_data["thumbnail"]
+    self.image          = bgg_data["image"].first if bgg_data["image"]
     self.min_players    = bgg_data["minplayers"].first["value"]
     self.max_players    = bgg_data["maxplayers"].first["value"]
     self.description    = bgg_data["description"].first
