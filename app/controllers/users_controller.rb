@@ -4,10 +4,15 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @user.update_collection if @user.needs_updating?
+    if @user.needs_updating?
+      logger.info("Updating #{@user.name}")
+      @user.update_collection
+    end
+
     @games = @user.games
 
     if @games.empty?
+      logger.info("#{@user.name} has no games, so I'm updating...")
       @currently_updating = true
       flash[:notice] = "Please hold while we update this user's games. This could take a few minutes."
     end
