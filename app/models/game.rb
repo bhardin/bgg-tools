@@ -1,7 +1,12 @@
+require 'array'
+
 class Game < ActiveRecord::Base
   serialize :poll, Hash
   has_many :users_games
   has_many :users, through: :users_games
+  has_many :historical_prices
+
+  attr_accessor :marketplace_history
 
   UPDATE_TIMEFRAME = 1.month
 
@@ -9,6 +14,18 @@ class Game < ActiveRecord::Base
     name_array.each do |name|
       return name["value"] if name["type"] == "primary"
     end
+  end
+
+  def mean_price
+    historical_price_array.mean
+  end
+
+  def median_price
+    historical_price_array.median
+  end
+
+  def historical_price_array
+    self.historical_prices.map {|x| x.price}
   end
 
   def update_bgg_data
@@ -20,7 +37,11 @@ class Game < ActiveRecord::Base
     name.nil? || self.updated_at < Time.zone.now - UPDATE_TIMEFRAME
   end
 
-  def update_stuff(bgg_data)
+  def update_stuff
+    bgg_api = BggApi.new
+    bgg_data = bgg_api.thing(id: bgg_id,
+                             pricehistory: 1)["item"].first
+
     self.name           = Game.primary_name(bgg_data["name"])
     self.thumbnail      = bgg_data["thumbnail"].first
     self.image          = bgg_data["image"].first
@@ -31,12 +52,16 @@ class Game < ActiveRecord::Base
     self.polls          = bgg_data["poll"]
     self.playing_time   = bgg_data["playingtime"].first["value"]
     self.minimum_age    = bgg_data["minage"].first["value"]
+    self.calculate_averages(bgg_data["marketplacehistory"])
+    self.store_marketplace_data
 
     self.save
   end
 
-  def calculate_averages(marketplace_listings)
-    @marketplace_listings = marketplace_listings[0]["listing"]
+  def calculate_averages(marketplace_history)
+    return unless marketplace_history
+
+    @marketplace_history = marketplace_history[0]["listing"]
 
     price_hash.each do |name, data|
       case name
@@ -59,26 +84,56 @@ class Game < ActiveRecord::Base
     self.save
   end
 
-  private
+  # private
+    def store_marketplace_data
+      return unless @marketplace_history
+
+      self.historical_prices.destroy_all
+
+      @marketplace_history.each do |listing|
+        condition = listing["condition"][0]["value"]
+        value     = listing["price"][0]["value"]
+        currency  = listing["price"][0]["currency"]
+        listdate  = listing["listdate"][0]["value"]
+        sale_date  = listing["saledate"][0]["value"]
+
+        hp = HistoricalPrice.new(
+          game_id: self.id,
+          date_sold: sale_date,
+          price: value,
+          currency: currency,
+          condition: condition
+        )
+
+        hp.save
+      end
+    end
+
     def price_hash
       @price_hash = {}
 
-      return @price_hash unless @marketplace_listings
+      return @price_hash unless @marketplace_history
 
-      @marketplace_listings.each do |listing|
+      self.historical_prices.destroy_all
+
+      @marketplace_history.each do |listing|
         condition = listing["condition"][0]["value"]
-        value = listing["price"][0]["value"]
-        currency = listing["price"][0]["currency"]
-        listdate = listing["listdate"][0]["value"]
+        value     = listing["price"][0]["value"]
+        currency  = listing["price"][0]["currency"]
+        listdate  = listing["listdate"][0]["value"]
+        sale_date  = listing["saledate"][0]["value"]
+        # link      = listing["link"][0]["href"]
 
         # Only use USD prices
         next unless currency == "USD"
 
         if @price_hash[condition.to_sym]
           @price_hash[condition.to_sym][:total] += value.to_f
+          @price_hash[condition.to_sym][:price_array] << [:date => listdate, :value => value.to_f]
           @price_hash[condition.to_sym][:count] += 1
         else
           @price_hash[condition.to_sym] = {}
+          @price_hash[condition.to_sym][:price_array] = [[:date => listdate, :value => value.to_f]]
           @price_hash[condition.to_sym][:total] = value.to_f
           @price_hash[condition.to_sym][:count] = 1
         end
@@ -92,5 +147,4 @@ class Game < ActiveRecord::Base
 
       @price_hash
     end
-
 end

@@ -12,7 +12,7 @@ class UpdateUserWorker
         if item["status"].first["own"] == "1"
           game = Game.find_or_create_by(:bgg_id => item['objectid'])
           user.games << game
-          # game.update_bgg_data # This will kick off a worker.
+          game.update_bgg_data # This will kick off a worker.
         end
       end
 

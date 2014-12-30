@@ -19,12 +19,16 @@
       <tr>
         <th>Name</th>
         <th>Average Value</th>
+        <th>Mean</th>
+        <th>Median</th>
       </tr>
     </thead>
     <% @games.each do | game | %>
       <tr>
         <td><%= link_to game.name, game %></td>
         <td><%= game.average_price %></td>
+        <td><%= game.mean_price %></td>
+
       </tr>
     <% end %>
   </table>
