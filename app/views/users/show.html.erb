@@ -5,9 +5,15 @@
 <% unless @currently_updating %>
   <div class="well well-sm">
     <ul>
-      <li>Total Game Value (Average): $ <%= @user.collection_value %></li>
+      <li>
+        Total Game Value (Mean): $ <%= @user.mean_collection_value %>
+        ($<%= @user.mean_game_price %> / per game)
+      </li>
+      <li>
+        Total Game Value (Median): $ <%= @user.median_collection_value %>
+        ($<%= @user.median_game_price %> / per game)
+      </li>
       <li>Total Games: <%= @user.games.length %></li>
-      <li>Average Game Price: $ <%= @user.average_game_price %></li>
       <li>Games with no price: <%= @user.games_without_prices %> (Never Sold on BGG Market Place)</li>
     </ul>
   </div>
@@ -18,7 +24,6 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Average Value</th>
         <th>Mean</th>
         <th>Median</th>
       </tr>
@@ -26,9 +31,8 @@
     <% @games.each do | game | %>
       <tr>
         <td><%= link_to game.name, game %></td>
-        <td><%= game.average_price %></td>
         <td><%= game.mean_price %></td>
-
+        <td><%= game.median_price %></td>
       </tr>
     <% end %>
   </table>

@@ -16,16 +16,20 @@ class Game < ActiveRecord::Base
     end
   end
 
-  def mean_price
-    historical_price_array.mean
+  def mean_price(return_value="No Historical Price Data")
+    return return_value if historical_price_array.empty?
+
+    historical_price_array.mean.round(2)
   end
 
-  def median_price
-    historical_price_array.median
+  def median_price(return_value="No Historical Price Data")
+    return return_value if historical_price_array.empty?
+
+    historical_price_array.median.round(2)
   end
 
   def historical_price_array
-    self.historical_prices.map {|x| x.price}
+    self.historical_prices.select {|x| x.currency == "USD"}.map {|x| x.price}
   end
 
   def update_bgg_data

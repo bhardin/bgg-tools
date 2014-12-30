@@ -15,16 +15,24 @@ class User < ActiveRecord::Base
     games.empty? || self.updated_at < Time.zone.now - UPDATE_TIMEFRAME
   end
 
-  def collection_value
-    (games.map { |g| g.average_price.to_f }.sum).round(2)
+  def mean_collection_value
+    (games.map {|x| x.mean_price(0)}.sum).round(2)
   end
 
-  def average_game_price
-    (collection_value / (games.length - games_without_prices)).round(2)
+  def median_collection_value
+    (games.map {|x| x.median_price(0)}.sum).round(2)
+  end
+
+  def median_game_price
+    (median_collection_value / (games.length - games_without_prices)).round(2)
+  end
+
+  def mean_game_price
+    (mean_collection_value / (games.length - games_without_prices)).round(2)
   end
 
   def games_without_prices
-    games.map {|x| x.average_price.to_f }.count(0)
+    games.map {|x| x.median_price(0)}.count(0)
   end
 
   def collection
