@@ -16,18 +16,6 @@ class Game < ActiveRecord::Base
     end
   end
 
-  def mean_price(return_value="No Historical Price Data")
-    return return_value if historical_price_array.empty?
-
-    historical_price_array.mean.round(2)
-  end
-
-  def median_price(return_value="No Historical Price Data")
-    return return_value if historical_price_array.empty?
-
-    historical_price_array.median.round(2)
-  end
-
   def historical_price_array
     self.historical_prices.select {|x| x.currency == "USD"}.map {|x| x.price}
   end
@@ -56,45 +44,40 @@ class Game < ActiveRecord::Base
     self.polls          = bgg_data["poll"]
     self.playing_time   = bgg_data["playingtime"].first["value"]
     self.minimum_age    = bgg_data["minage"].first["value"]
-    self.calculate_averages(bgg_data["marketplacehistory"])
-    self.store_marketplace_data
 
-    self.save
-  end
-
-  def calculate_averages(marketplace_history)
-    return unless marketplace_history
-
-    @marketplace_history = marketplace_history[0]["listing"]
-
-    price_hash.each do |name, data|
-      case name
-      when :new
-        self.new_price = price_hash[:new][:average]
-      when :likenew
-        self.like_new_price = price_hash[:likenew][:average]
-      when :verygood
-        self.very_good_price = price_hash[:verygood][:average]
-      when :good
-        self.good_price = price_hash[:good][:average]
-      when :acceptable
-        self.acceptable_price = price_hash[:acceptable][:average]
-      end
+    if bgg_data["marketplacehistory"] &&
+       bgg_data["marketplacehistory"][0] &&
+       bgg_data["marketplacehistory"][0]["listing"]
+      self.marketplace_history = bgg_data["marketplacehistory"][0]["listing"]
     end
 
-    self.average_price = (price_hash.map { |x| x[1][:average] }.sum / price_hash.size.to_f).round(2)
-    self.average_price = 0 if self.average_price.nan?
+    self.store_marketplace_data
+    self.save
+
+    # Qwirky: I have to reload the object, to pull the new data from the DB.
+    #         If I don't save the previous line, all the other stuff (like the
+    #         name) is forgotten.
+    reload
+    self.calculate_prices
 
     self.save
   end
 
   # private
+    def calculate_prices
+      # if self.historical_prices
+        self.mean_price = self.historical_price_array.mean.round(2)
+        self.median_price = self.historical_price_array.median.round(2)
+        self.save
+      # end
+    end
+
     def store_marketplace_data
-      return unless @marketplace_history
+      return unless marketplace_history
 
       self.historical_prices.destroy_all
 
-      @marketplace_history.each do |listing|
+      marketplace_history.each do |listing|
         condition = listing["condition"][0]["value"]
         value     = listing["price"][0]["value"]
         currency  = listing["price"][0]["currency"]
@@ -111,44 +94,5 @@ class Game < ActiveRecord::Base
 
         hp.save
       end
-    end
-
-    def price_hash
-      @price_hash = {}
-
-      return @price_hash unless @marketplace_history
-
-      self.historical_prices.destroy_all
-
-      @marketplace_history.each do |listing|
-        condition = listing["condition"][0]["value"]
-        value     = listing["price"][0]["value"]
-        currency  = listing["price"][0]["currency"]
-        listdate  = listing["listdate"][0]["value"]
-        sale_date  = listing["saledate"][0]["value"]
-        # link      = listing["link"][0]["href"]
-
-        # Only use USD prices
-        next unless currency == "USD"
-
-        if @price_hash[condition.to_sym]
-          @price_hash[condition.to_sym][:total] += value.to_f
-          @price_hash[condition.to_sym][:price_array] << [:date => listdate, :value => value.to_f]
-          @price_hash[condition.to_sym][:count] += 1
-        else
-          @price_hash[condition.to_sym] = {}
-          @price_hash[condition.to_sym][:price_array] = [[:date => listdate, :value => value.to_f]]
-          @price_hash[condition.to_sym][:total] = value.to_f
-          @price_hash[condition.to_sym][:count] = 1
-        end
-      end
-
-      # calculate and add averages
-      @price_hash.each do |data|
-        average = (data[1][:total] / data[1][:count].to_f).round(2)
-        data[1][:average] = average
-      end
-
-      @price_hash
     end
 end

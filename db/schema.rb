@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141229211226) do
+ActiveRecord::Schema.define(version: 20141230194504) do
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 20141229211226) do
     t.integer  "minimum_age"
     t.integer  "playing_time"
     t.text     "polls"
+    t.float    "median_price"
+    t.float    "mean_price"
   end
 
   add_index "games", ["bgg_id"], name: "index_games_on_bgg_id", unique: true, using: :btree

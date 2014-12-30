@@ -1,5 +1,6 @@
 class Array
 	def median
+		return 0 if self.empty?
 		sorted = self.sort
 		len = sorted.length
 
@@ -11,6 +12,7 @@ class Array
 	end
 
 	def mean
+		return 0 if self.empty?
 		sum / size
 	end
 end

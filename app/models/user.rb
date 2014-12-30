@@ -16,11 +16,11 @@ class User < ActiveRecord::Base
   end
 
   def mean_collection_value
-    (games.map {|x| x.mean_price(0)}.sum).round(2)
+    games.select {|x| !x.mean_price.nil? }.map {|x| x.mean_price}.sum.round(2)
   end
 
   def median_collection_value
-    (games.map {|x| x.median_price(0)}.sum).round(2)
+    games.select {|x| !x.median_price.nil? }.map {|x| x.median_price}.sum.round(2)
   end
 
   def median_game_price
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   end
 
   def games_without_prices
-    games.map {|x| x.median_price(0)}.count(0)
+    games.map {|x| x.median_price}.count(0)
   end
 
   def collection
