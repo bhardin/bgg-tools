@@ -32,12 +32,18 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+group :development do
+  gem 'guard'
+  gem 'guard-rails'
+  gem 'guard-rspec'
+  gem 'awesome_print'
+end
+
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
   gem 'coveralls', require: false
   gem 'webmock'
   gem 'vcr'
-  gem 'awesome_print'
 	gem 'capistrano', '~> 3.3.0'
 	gem 'capistrano-rvm'
 	gem 'capistrano-bundler', '~> 1.1.2'
