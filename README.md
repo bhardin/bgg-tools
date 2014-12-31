@@ -1,5 +1,7 @@
 # bggtools.com
 
+[![Build Status](https://travis-ci.org/bhardin/bgg-tools.svg?branch=master)](https://travis-ci.org/bhardin/bgg-tools) [![Coverage Status](https://coveralls.io/repos/bhardin/bgg-tools/badge.png)](https://coveralls.io/r/bhardin/bgg-tools)
+
 Source code for bggtools.com.
 
 ## TO-DO

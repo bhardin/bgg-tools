@@ -34,6 +34,7 @@ end
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
+  gem 'coveralls', require: false
   gem 'webmock'
   gem 'vcr'
   gem 'awesome_print'
