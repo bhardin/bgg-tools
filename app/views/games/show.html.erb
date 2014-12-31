@@ -1,8 +1,9 @@
 <p id="notice"><%= notice %></p>
 
+<h1><%= @game.name %></h1>
+
 <div class="row">
 	<div class="col-md-3">
-		<h1><%= @game.name %></h1>
 		<%= image_tag(@game.thumbnail) %>
   </div>
 
@@ -10,50 +11,38 @@
   	<table class="table">
 			<thead>
 		    <tr>
-		      <th>Name</th>
-		      <th>Value</th>
+		      <th>Bgg ID</th>
+		      <th>Mean Price</th>
+		      <th>Median Price</th>
+		      <th>Last Updated</th>
 		    </tr>
 		  </thead>
 			<tr>
-				<td>BGG-ID</td>
 				<td><%= @game.bgg_id %></td>
+				<td><%= @game.mean_price %></td>
+				<td><%= @game.median_price %></td>
+				<td><%= time_ago_in_words(@game.updated_at) %> ago</td>
 			</tr>
-			<tr>
-				<td>new_price</td>
-				<td><%= @game.new_price %></td>
-			</tr>
-			<tr>
-				<td>like_new_price</td>
-				<td><%= @game.like_new_price %></td>
-			</tr>
-			<tr>
-				<td>very_good_price</td>
-				<td><%= @game.very_good_price %></td>
-			</tr>
-			<tr>
-				<td>good_price</td>
-				<td><%= @game.good_price %></td>
-			</tr>
-			<tr>
-				<td>acceptable_price</td>
-				<td><%= @game.acceptable_price %></td>
-			</tr>
-			<tr>
-				<td>average_price</td>
-				<td><%= @game.average_price %></td>
-			</tr>
-			<tr>
-				<td>last_updated</td>
-				<td><%= @game.updated_at %></td>
-			</tr>
-			<tr>
-				<td>image</td>
-				<td><%= @game.image %></td>
-			</tr>
-			<tr>
-				<td>thumbnail</td>
-				<td><%= @game.thumbnail %></td>
-			</tr>
+		</table>
+  </div>
+
+  <h3>Historical Prices</h3>
+  <div class="col-md-9">
+  	<table class="table">
+			<thead>
+		    <tr>
+		      <th>Price</th>
+		      <th>Date</th>
+		    </tr>
+		  </thead>
+		  <% @historical_prices.each do |hp| %>
+				<tr>
+					<td><%= hp.date_sold %></td>
+					<td><%= hp.price %></td>
+					<td><%= hp.currency %></td>
+					<td><%= hp.condition %></td>
+				</tr>
+			<% end %>
 		</table>
   </div>
 </div>
