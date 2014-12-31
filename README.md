@@ -7,6 +7,7 @@ Source code for bggtools.com.
 * [ ] Update Jquery on page, rather than refresh
 * [ ] Capistrano: Unicorn
 * [ ] Capistrano: Sidekiq
+* [ ] Get tests working on Travis
 
 ## Running Locally
 

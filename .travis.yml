@@ -1,0 +1,8 @@
+# .travis.yml
+
+language: ruby
+rvm:
+  - 2.1.5
+before_script:
+  - cp config/database.travis.yml config/database.yml
+  - mysql -e 'create database bggtools_test;'
