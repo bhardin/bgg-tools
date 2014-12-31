@@ -21,7 +21,7 @@ class Game < ActiveRecord::Base
   end
 
   def update_bgg_data
-    GameUpdateWorker.perform_async(bgg_id) if self.needs_updating?
+    game_update_worker.perform_async(bgg_id) if self.needs_updating?
   end
 
   def needs_updating?
@@ -96,5 +96,10 @@ class Game < ActiveRecord::Base
 
         hp.save
       end
+    end
+
+  private
+    def game_update_worker
+      GameUpdateWorker
     end
 end

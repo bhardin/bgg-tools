@@ -2,6 +2,37 @@ require 'spec_helper'
 
 describe Game do
   let(:game) { Game.new(name: "acquire", bgg_id: 5) }
+
+  describe '#update_bgg_data' do
+    let(:worker) { double(GameUpdateWorker) }
+
+    before :each do
+      game.stub(:game_update_worker).and_return(worker)
+    end
+
+    context "when the game needs updating" do
+      before :each do
+        game.stub(:needs_updating?).and_return(true)
+      end
+
+      it "is updated" do
+        expect(worker).to receive(:perform_async).with(5)
+        game.update_bgg_data
+      end
+    end
+
+    context "when the game doesn't need updating" do
+      before :each do
+        game.stub(:needs_updating?).and_return(false)
+      end
+
+      it "isn't updated" do
+        expect(worker).not_to receive(:perform_async).with(5)
+        game.update_bgg_data
+      end
+    end
+  end
+
   describe '#needs_updating?' do
     context "when game has no name" do
       it 'is true' do
