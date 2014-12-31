@@ -3,6 +3,17 @@ require 'spec_helper'
 describe Game do
   let(:game) { Game.new(name: "acquire", bgg_id: 5) }
 
+  describe '.primary_name' do
+    it 'returns the primary name' do
+      name_array = [{"type"=>"primary", "sortindex"=>"1", "value"=>"Acquire"},
+        {"type"=>"alternate", "sortindex"=>"1", "value"=>"Cartel"},
+        {"type"=>"alternate", "sortindex"=>"1", "value"=>"Investor"},
+        {"type"=>"alternate", "sortindex"=>"1", "value"=>"Trust"}
+      ]
+      expect(Game.primary_name(name_array)).to eq("Acquire")
+    end
+  end
+
   describe '#update_bgg_data' do
     let(:worker) { double(GameUpdateWorker) }
 
