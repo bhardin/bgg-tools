@@ -30,6 +30,8 @@ class Game < ActiveRecord::Base
   end
 
   def update_stuff
+    raise "No BGG_ID for this game" if self.bgg_id.nil?
+
     bgg_api = BggApi.new
     bgg_data = bgg_api.thing(id: bgg_id,
                              pricehistory: 1)["item"].first
