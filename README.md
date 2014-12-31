@@ -5,7 +5,6 @@ Source code for bggtools.com.
 ## TO-DO
 
 * [ ] Update Jquery on page, rather than refresh
-* [ ] Add Link to Paypal donations
 * [ ] Capistrano: Unicorn
 * [ ] Capistrano: Sidekiq
 
