@@ -6,12 +6,12 @@
   <div class="well well-sm">
     <ul>
       <li>
-        Total Game Value (Mean): $ <%= @user.mean_collection_value %>
-        ($<%= @user.mean_game_price %> / per game)
+        Total Game Value (Mean): <%= number_to_currency(@user.mean_collection_value) %>
+        (<%= number_to_currency(@user.mean_game_price) %> / per game)
       </li>
       <li>
-        Total Game Value (Median): $ <%= @user.median_collection_value %>
-        ($<%= @user.median_game_price %> / per game)
+        Total Game Value (Median): <%= number_to_currency(@user.median_collection_value) %>
+        (<%= number_to_currency(@user.median_game_price) %> / per game)
       </li>
       <li>Total Games: <%= @user.games.length %></li>
       <li>Games with no price: <%= @user.games_without_prices %> (Never Sold on BGG Market Place)</li>
@@ -31,8 +31,8 @@
     <% @games.each do | game | %>
       <tr>
         <td><%= link_to game.name, game %></td>
-        <td><%= game.mean_price %></td>
-        <td><%= game.median_price %></td>
+        <td><%= number_to_currency(game.mean_price) %></td>
+        <td><%= number_to_currency(game.median_price) %></td>
       </tr>
     <% end %>
   </table>
