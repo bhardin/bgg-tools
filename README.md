@@ -5,8 +5,6 @@ Source code for bggtools.com.
 ## TO-DO
 
 * [ ] Update Jquery on page, rather than refresh
-* [ ] Migrate dev environment to MySQL
-* [X] Move Update User to a background worker
 * [ ] Add Link to Paypal donations
 * [ ] Capistrano: Unicorn
 * [ ] Capistrano: Sidekiq
@@ -26,3 +24,5 @@ Source code for bggtools.com.
 ## Deploying to Production
 
 `cap production deploy`
+
+When deploying, you have to log into the server and kill off the old unicorn process. I have no idea why this is.
