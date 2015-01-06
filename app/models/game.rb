@@ -26,7 +26,7 @@ class Game < ActiveRecord::Base
 
   def needs_updating?
     # No Name or Updated within 1 month
-    name.nil? || self.updated_at < Time.zone.now - UPDATE_TIMEFRAME
+    name.nil? || self.updated_at.nil? || self.updated_at < Time.zone.now - UPDATE_TIMEFRAME
   end
 
   def update_stuff

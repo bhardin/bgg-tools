@@ -52,6 +52,13 @@ describe Game do
       end
     end
 
+    context "when the game has never been updated" do
+      it  'is true' do
+        game.stub(:updated_at).and_return(nil)
+        expect(game.needs_updating?).to be_true
+      end
+    end
+
     context "when game hasn't been updated in 1 month" do
       it 'is true' do
         game.stub(:updated_at).and_return(Time.zone.now - 1.month - 1.second)
