@@ -9,6 +9,15 @@ require 'webmock/rspec'
 require 'coveralls'
 Coveralls.wear!
 
+# VCR Setup
+require 'vcr'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
+end
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
@@ -18,6 +27,11 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
+  # VCR setup
+  # so we can use :vcr rather than :vcr => true;
+  # in RSpec 3 this will no longer be necessary.
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+
   # WebMock.disable_net_connect!
 
   # ## Mock Framework
