@@ -1,5 +1,7 @@
 Bggtools::Application.routes.draw do
-  resources :users, only: [:show] do
+  resources :users, id: /[A-Za-z0-9\.]+?/,
+                    format: /json|csv|xml|yaml/,
+                    only: [:show] do
     collection do
       get 'search'
     end
