@@ -6,6 +6,8 @@ class UpdateUserWorker
     user = User.find(user_id)
 
     if user.needs_updating?
+      return if user.collection.nil?
+
       user.games.delete_all # Remove old associations.
 
       user.collection.each do |item|
