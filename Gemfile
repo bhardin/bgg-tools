@@ -37,6 +37,9 @@ group :development do
   gem 'guard-rails'
   gem 'guard-rspec'
   gem 'awesome_print'
+end
+
+group :test do
   gem 'webmock'
 end
 
