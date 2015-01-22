@@ -37,20 +37,19 @@ group :development do
   gem 'guard-rails'
   gem 'guard-rspec'
   gem 'awesome_print'
-end
-
-group :test do
-  gem 'webmock'
-end
-
-group :development, :test do
-  gem 'rspec-rails', '~> 2.0'
-  gem 'coveralls', require: false
-  gem 'vcr'
   gem 'capistrano', '~> 3.3.0'
   gem 'capistrano-rvm'
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-nginx-unicorn'
   gem 'capistrano-sidekiq'
+end
+
+group :test do
+  gem 'webmock'
+  gem 'fabrication'
+  gem 'rspec-rails', '~> 2.0'
+  gem 'coveralls', require: false
+  gem 'vcr'
+  gem 'faker'
 end
