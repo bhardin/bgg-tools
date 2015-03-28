@@ -7,6 +7,12 @@ class GamesController < ApplicationController
     @historical_prices = @game.historical_prices
   end
 
+  # POST /games/search?name=some game name
+  def search
+    @games = Game.where('name LIKE ?', "%#{params[:name]}%")
+    render :index
+  end
+
   # DELETE /games/1
   # DELETE /games/1.json
   def destroy

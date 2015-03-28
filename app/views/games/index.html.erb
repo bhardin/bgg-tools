@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<table class="table sortable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Mean</th>
+      <th>Median</th>
+    </tr>
+  </thead>
+  <% @games.each do | game | %>
+    <tr>
+      <td><%= link_to game.name, game %></td>
+      <td><%= number_to_currency(game.mean_price) %></td>
+      <td><%= number_to_currency(game.median_price) %></td>
+    </tr>
+  <% end %>
+</table>
+
