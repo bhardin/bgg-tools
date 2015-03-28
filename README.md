@@ -13,8 +13,15 @@ Source code for bggtools.com.
 
 ## Running Locally
 
+* `git clone git@github.com:bhardin/bgg-tools.git`
+* `cd bgg-tools`
+* `bundle install`
+* `rake db:setup`
+
 * Start applicaiton: `rails s`
 * Start workers: `sidekiq`
+
+Note: You will need to have redis and mysql running.
 
 ## Deleting all jobs from the Queue:
 
