@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.3.3'
+lock '3.3.5'
 
 set :application, 'bgg-tools'
 set :repo_url, 'git@github.com:bhardin/bgg-tools.git'
