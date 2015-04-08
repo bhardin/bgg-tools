@@ -1,5 +1,5 @@
 Bggtools::Application.routes.draw do
-  resources :users, id: /[_%A-Za-z0-9\.]+?/,
+  resources :users, id: /[_%A-Za-z0-9\.+ ]+?/,
                     format: /json|csv|xml|yaml/,
                     only: [:show] do
     collection do
