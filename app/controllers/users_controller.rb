@@ -28,6 +28,7 @@ class UsersController < ApplicationController
   end
 
   def update_games
+    @user.mark_as_needs_updating
     @user.update_collection
     redirect_to @user
   end

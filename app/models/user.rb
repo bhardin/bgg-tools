@@ -11,6 +11,10 @@ class User < ActiveRecord::Base
     UpdateUserWorker.perform_async(self.id)
   end
 
+  def mark_as_needs_updating
+    games.delete_all
+  end
+
   def needs_updating?
     games.empty? || self.updated_at < Time.zone.now - UPDATE_TIMEFRAME
   end
