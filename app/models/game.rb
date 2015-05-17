@@ -34,7 +34,8 @@ class Game < ActiveRecord::Base
 
     bgg_api = BggApi.new
     bgg_data = bgg_api.thing(id: bgg_id,
-                             pricehistory: 1)["item"].first
+                             pricehistory: 1,
+                             stats: 1)["item"].first
 
     self.name           = Game.primary_name(bgg_data["name"])
     self.thumbnail      = bgg_data["thumbnail"].first if bgg_data["thumbnail"]
@@ -46,6 +47,8 @@ class Game < ActiveRecord::Base
     self.polls          = bgg_data["poll"]
     self.playing_time   = bgg_data["playingtime"].first["value"]
     self.minimum_age    = bgg_data["minage"].first["value"]
+    self.average_rating = bgg_data["statistics"].first["ratings"].first["average"].first["value"]
+    self.bayesian_average = bgg_data["statistics"].first["ratings"].first["bayesaverage"].first["value"]
 
     if bgg_data["marketplacehistory"] &&
        bgg_data["marketplacehistory"][0] &&
