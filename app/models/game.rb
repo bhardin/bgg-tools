@@ -20,8 +20,10 @@ class Game < ActiveRecord::Base
     self.historical_prices.select {|x| x.currency == "USD"}.map {|x| x.price}
   end
 
-  def update_bgg_data
-    game_update_worker.perform_async(bgg_id) if self.needs_updating?
+  def update_bgg_data(force_update = false)
+    if self.needs_updating? || force_update
+      game_update_worker.perform_async(bgg_id)
+    end
   end
 
   def needs_updating?
