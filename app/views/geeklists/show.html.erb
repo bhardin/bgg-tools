@@ -1,0 +1,23 @@
+<h1><%= @geeklist["title"] %></h1>
+
+<table class="table sortable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Rank</th>
+      <th>Median Price</th>
+      <th>Mean Price</th>
+    </tr>
+  </thead>
+  <% @geeklist["item"].each do | item | %>
+    <% game_id = item["objectid"] %>
+    <% game = Game.find_or_create_by(:bgg_id => game_id) %>
+    <% game.update_bgg_data %>
+    <tr>
+      <td><%= link_to game.name, "http://www.boardgamegeek.com/boardgame/#{game.bgg_id}" %></td>
+      <td><%= game.bayesian_average %></td>
+      <td><%= game.median_price %></td>
+      <td><%= game.mean_price %></td>
+    </tr>
+  <% end %>
+</table>
