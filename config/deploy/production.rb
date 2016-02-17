@@ -14,7 +14,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server '23.239.7.54', user: 'bggtools', roles: %w{web app db}
+server 'bggtools.com', user: 'bggtools', roles: %w{web app db}
 # set :nginx_server_name, 'bggtools.com'
 
 # Custom SSH Options
@@ -49,7 +49,7 @@ namespace :deploy do
   desc "Symlinks the database.yml"
 
   task :symlink_db do
-	  on "bggtools@23.239.7.54" do
+	  on "bggtools@bggtools.com" do
 	    execute "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
 	  end
   end
