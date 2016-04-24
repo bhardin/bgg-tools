@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'bgg-api', :github => 'bhardin/bgg-api', :ref => 'ef3680077cce3b53b163b52374494bc2c94d89d8'
 gem 'friendly_id'
 gem 'less-rails-bootstrap'
-gem 'mysql2'
+gem 'mysql2', '~> 0.4.4'
 gem 'rake'
 gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil # For sidekiq interface

@@ -313,7 +313,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   less-rails-bootstrap
-  mysql2
+  mysql2 (~> 0.4.4)
   rails (= 4.0.0)
   rake
   rspec-rails (~> 2.0)
