@@ -150,7 +150,7 @@ GEM
     minitest (4.7.5)
     multi_json (1.11.0)
     multi_xml (0.5.5)
-    mysql2 (0.4.4)
+    mysql2 (0.3.20)
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -313,7 +313,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   less-rails-bootstrap
-  mysql2 (~> 0.4.4)
+  mysql2 (~> 0.3.10)
   rails (= 4.0.0)
   rake
   rspec-rails (~> 2.0)
