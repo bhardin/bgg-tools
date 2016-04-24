@@ -4,11 +4,10 @@ require 'capistrano/setup'
 # Include default deployment tasks
 require 'capistrano/deploy'
 
-require 'capistrano/rvm'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
-require 'capistrano/nginx_unicorn'
+require 'capistrano/unicorn_nginx'
 require 'capistrano/sidekiq'
 
 # Load custom tasks from `lib/capistrano/tasks' if you have any defined
